@@ -13,3 +13,4 @@ app.listen(config.port, () => {
   console.log("server is running on port ", config.port);
   app.use('/users', usersRoute)
 });
+//NAJPIERW ZBUDUJ DZIAŁAJACY AUTH SYSTEM i ROUTY POTRZEBNE POTEM ADD SQL
