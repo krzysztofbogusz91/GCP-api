@@ -14,6 +14,7 @@ export const verifyToken = (req: Request, res: Response, next: NextFunction) => 
                 return onError(401, 'Token is not valid')
             }
             return next()
+
         })
     }catch(err){
         return onError(401, "Auth token not provided")

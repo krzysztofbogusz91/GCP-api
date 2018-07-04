@@ -8,8 +8,14 @@ export class UserModel{
     }
     findUser(email, password){
         this.getAllUsers().then(dbContent => {
-            searchDb(dbContent, email, password)
+            searchDb(dbContent, email, password).then(result => {
+                return result
+            }, err =>{
+                return err;
+            })
         })
         
     }
 }
+ 
+export const userModel = new UserModel()
