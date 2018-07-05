@@ -1,9 +1,10 @@
 import * as Express from "express";
-import * as bodyParser from "body-parser";
 import * as cors from "cors";
-import * as mysql from "mysql";
 import { config } from "./config";
 import { usersRoute } from "./routes/users.route";
+import { sql } from "./helpers/sql";
+
+ 
 const app = Express();
 const setUp = config.setUp;
 
