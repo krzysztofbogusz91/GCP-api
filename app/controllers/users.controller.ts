@@ -21,9 +21,7 @@ export class UsersController {
   }
 
   public postUser(req: Request, res: Response) {
-    console.log("post user");
     const password = userModel.hashPassword(req.body.password)
-    console.log(password);
     const name = req.body.name;
     const email = req.body.email;
     const newUser = {password, name, email}

@@ -1,7 +1,7 @@
 import { searchDb } from "./../helpers/searchDb";
 import * as bcrypt from "bcrypt";
 import { users } from "./../../seeds/test-db";
-import { config } from './../config';
+import { config } from "./../config";
 
 export class UserModel {
   getAllUsers() {
@@ -9,13 +9,10 @@ export class UserModel {
   }
   hashPassword(password) {
     //salt and hash password
-    const salt = config.secret
-    bcrypt.genSalt(10, (err, salt) => {
-      bcrypt.hash(password, salt, (err, hash) => {
-        password = hash;
-        return password;
-      });
-    });
+    const salt = bcrypt.genSaltSync(10);
+    const hash = bcrypt.hashSync(password, salt);
+
+    return hash;
   }
 }
 
