@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import { users } from './../../seeds/test-db';
 import { errorHandler } from "../helpers/error.helper";
+import { userModel } from "../models/user.model";
 
 export class UsersController {
   public getUsers(req: Request, res: Response) {
@@ -20,7 +21,14 @@ export class UsersController {
   }
 
   public postUser(req: Request, res: Response) {
-    console.log("get users works");
+    console.log("post user");
+    const password = userModel.hashPassword(req.body.password)
+    console.log(password);
+    const name = req.body.name;
+    const email = req.body.email;
+    const newUser = {password, name, email}
+    //here goes add user to db method
+    users.push(newUser)
 
     res.status(200).send({msg: "post user to db, register"})
   }
