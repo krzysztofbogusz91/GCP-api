@@ -17,20 +17,19 @@ export class AuthController {
     console.log("get users works");
     const onError = errorHandler(res)
     const email = req.body.email;
-    const isPasswordCorrect = bcrypt.compareSync(req.body.password);
     const db = users;
-    if(!isPasswordCorrect){
-      return res.status(401).send({err: 'Incorrect password'})
-    }
+   
     searchDb(db, email).then(
       result => {
+        const isPasswordCorrect = bcrypt.compareSync(req.body.password, result.password);
+        if(!isPasswordCorrect){
+         return onError(401, 'wrong password')
+        }
         const token = controllerAuth.getToken(result.email);
         return res.status(200).send({token:token});
       },
       err => {
-        return res
-          .status(401)
-          .send({ err: "user not found, or password not matching" });
+        return onError(400, 'user not found')
       }
     );
   }
