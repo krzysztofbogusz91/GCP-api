@@ -3,6 +3,11 @@ import { users } from "./../../seeds/test-db";
 import { errorHandler } from "../helpers/error.helper";
 import { userModel } from "../models/user.model";
 import { searchDb } from "../helpers/searchDb";
+import { sql } from "../helpers/sql";
+import { config } from "../config";
+import { User } from "../models/user.interface";
+
+const search = config.env === "dev" ? searchDb : sql.sqlFindAndReturn;
 
 export class UsersController {
   //remove from production
@@ -14,8 +19,8 @@ export class UsersController {
   public getUser(req: Request, res: Response) {
     const onError = errorHandler(res);
     const email = req["email"];
-    searchDb(users, email).then(
-      result => {
+    search(email).then(
+      (result: User) => {
         const publicUser = {
           name: result.name,
           email: result.email
@@ -37,10 +42,8 @@ export class UsersController {
 
     userModel.addUserToDb(newUser).then(
       data => {
-        if (data.ok) {
-          return res.status(200).send({ msg: "post user to db, register" });
-        }
-        return onError(500, "internal error");
+        console.log(data);
+        return res.status(200).send({ msg: "post user to db, register" });
       },
       err => onError(500, "user not added, internal err")
     );

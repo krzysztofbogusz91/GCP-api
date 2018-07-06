@@ -1,5 +1,6 @@
 import * as mysql from "mysql";
 import { config } from "../config";
+import { User } from "../models/user.interface";
 
 const setUp = config.setUp;
 
@@ -34,7 +35,7 @@ export class SQL {
 
       con.query(
         `select * from test_ui where email=${mysql.escape(email)}`,
-        function(err, result) {
+        function(err, result: User[]) {
           if (err) return reject(err);
           if (result.length > 0) {
             return resolve(result[0]);
@@ -63,7 +64,7 @@ export class SQL {
       con.query(sql, function(err, result) {
         if (err) return reject(err);
 
-        return resolve(user);
+        return resolve({msg: 'user successfully added'});
       });
       con.end();
     });

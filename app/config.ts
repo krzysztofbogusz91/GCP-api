@@ -8,5 +8,7 @@ export const config = {
     database: "bs_database",
     acquireTimeout: 1000000
   },
-  secret: '1234'
+  secret: '1234',
+  //dev || prod
+  env: 'dev'
 };

@@ -1,12 +1,18 @@
-import { searchDb } from "./../helpers/searchDb";
 import * as bcrypt from "bcrypt";
 import { users } from "./../../seeds/test-db";
 import { config } from "./../config";
 import { User } from "./user.interface";
+import { sql } from "../helpers/sql";
 
 export class UserModel {
   getAllUsers() {
-    return Promise.resolve(users);
+    if (config.env === "dev") {
+      return Promise.resolve(users);
+    } else {
+      return sql.sqlGetAll()
+    }
+
+    
   }
   hashPassword(password) {
     //salt and hash password
@@ -18,7 +24,11 @@ export class UserModel {
 
   //add user to db method
   addUserToDb(user: User) {
-    users.push(user);
+    if (config.env === "dev") {
+      users.push(user);
+    } else {
+      return sql.sqlPostToDb(user);
+    }
     return Promise.resolve({ ok: true });
   }
 }

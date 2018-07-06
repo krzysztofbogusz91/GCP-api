@@ -1,11 +1,13 @@
 import { Request, Response } from "express";
 import * as jwt from "jsonwebtoken";
 import { config } from "./../config";
-import { users } from "./../../seeds/test-db";
 import { searchDb } from "./../helpers/searchDb";
-import { userModel } from "./../models/user.model";
 import * as bcrypt from "bcrypt";
 import { errorHandler } from "../helpers/error.helper";
+import { sql } from "../helpers/sql";
+import { User } from "../models/user.interface";
+
+const search = config.env === "dev" ? searchDb : sql.sqlFindAndReturn;
 
 export class AuthController {
   private getToken(user) {
@@ -15,10 +17,9 @@ export class AuthController {
   public logIn(req: Request, res: Response) {
     const onError = errorHandler(res);
     const email = req.body.email;
-    const db = users;
 
-    searchDb(db, email).then(
-      result => {
+    search(email).then(
+      (result: User) => {
         const isPasswordCorrect = bcrypt.compareSync(
           req.body.password,
           result.password
