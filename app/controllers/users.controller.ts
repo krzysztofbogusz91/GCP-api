@@ -12,8 +12,14 @@ const search = config.env === "dev" ? searchDb : sql.sqlFindAndReturn;
 export class UsersController {
   //remove from production
   public getUsers(req: Request, res: Response) {
-    const usersDb = users;
-    return res.status(200).send(usersDb);
+    const onError = errorHandler(res);
+    
+    //const usersDb = users;
+    userModel.getAllUsers().then(usersDb =>{
+      return res.status(200).send(usersDb);
+    }).catch(err =>{
+      onError(404, 'internal err')
+    })
   }
 
   public getUser(req: Request, res: Response) {
